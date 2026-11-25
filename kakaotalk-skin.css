@@ -1,0 +1,300 @@
+/* ==========================================================================
+   핑크팀 회의실 — 카카오톡 스킨 (kakaotalk-skin.css)
+   --------------------------------------------------------------------------
+   [이게 뭔가요]
+   회의실 기능(JS)은 그대로 두고, 겉모습만 카카오톡 채팅방 스타일로
+   바꾸는 스킨 파일입니다. 깔끔하고 대중적인 새 버전입니다.
+     - 노란 내 말풍선(#FEE500) · 흰 상대 말풍선 · 하늘색 채팅 배경(#B2C7D9)
+     - 상단바 흰색, 방 목록은 카톡 채팅 목록처럼
+     - 프로필은 동그란 카톡 프로필, 입력창은 둥근 카톡 입력창
+   JS·HTML·기능은 하나도 건드리지 않습니다. CSS만으로 바꿉니다.
+
+   [붙이는 방법]
+   1) 이 파일을 회의실 index.html과 같은 폴더에 넣습니다.
+   2) index.html의 <head> 안에서, 기존 <style> 블록 "뒤"에 아래 한 줄을 넣습니다.
+      (순서가 중요합니다. 스킨이 나중에 와야 원래 색을 덮어씁니다.)
+        <link rel="stylesheet" href="kakaotalk-skin.css">
+   3) <html> 태그에 data-skin 속성을 넣습니다. 기본값은 sky(카톡 기본 하늘색)입니다.
+        <html lang="ko" data-skin="sky">
+
+   [배경 색 바꾸기]
+   data-skin 값만 바꾸면 채팅 배경이 바뀝니다.
+     sky   = 카톡 기본 하늘색 (기본)   pink = 연핑크
+     mint  = 민트                      gray = 회색
+     dark  = 다크
+
+   [내 메시지 노란 말풍선]
+   지금 회의실은 보낸 사람을 가리지 않고 전부 같은 모양으로 보여줍니다.
+   그래서 기본은 전부 흰 말풍선(상대 말풍선)입니다.
+   나중에 앱에서 내 메시지(발신자 선택값과 같은 사람)에 class="mine"을
+   붙여주면, 아래 .msg.mine 규칙이 자동으로 노란 말풍선·오른쪽 정렬로
+   바꿔줍니다. CSS만으로는 발신자를 알 수 없어 미리 준비만 해둔 것입니다.
+
+   [빼는 방법(롤백)]
+   <link rel="stylesheet" href="kakaotalk-skin.css"> 한 줄과
+   data-skin 속성만 지우면 원래 다크 테마로 돌아갑니다.
+
+   [주의] 이 파일에는 API 키·비밀번호·토큰이 없습니다. 넣지도 마세요.
+   카카오톡 상표·로고는 사용하지 않았습니다. 색과 말풍선 형태만 참고했습니다.
+   ========================================================================== */
+
+/* ---------- 스킨 색 (기본: sky = 카톡 기본 하늘색) ---------- */
+:root{
+  --kakao-yellow:#fee500;
+  --kakao-yellow-dark:#e8d400;
+  --kakao-brown:#3c1e1e;
+  --chat-bg:#b2c7d9;
+  --bubble-other:#ffffff;
+  --bubble-mine:#fee500;
+  --panel:#ffffff; --panel2:#fafafa; --line:#e5e5e5; --line-soft:#eeeeee;
+  --text:#191919; --muted:#8e8e8e;
+  --accent:#fee500; --accent-dark:#e8d400; --accent-soft:#fffde7; --accent-dim:#fffde7;
+  --ok:#0d9a70; --warn:#d97706;
+  --radius:14px;
+  color-scheme:light;
+}
+[data-skin="sky"]{ --chat-bg:#b2c7d9; }
+[data-skin="pink"]{ --chat-bg:#f5d6de; }
+[data-skin="mint"]{ --chat-bg:#cde8dd; }
+[data-skin="gray"]{ --chat-bg:#e8e8e8; }
+[data-skin="dark"]{
+  --chat-bg:#2e3440;
+  --bubble-other:#3d4454;
+  --panel:#2e3440; --panel2:#363e4e; --line:#4a5468; --line-soft:#4a5468;
+  --text:#eceff4; --muted:#a0a8b8;
+  color-scheme:dark;
+}
+
+/* ---------- 바탕 ---------- */
+body{
+  background:#f2f2f2;
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Malgun Gothic","Segoe UI",Roboto,sans-serif;
+}
+a{color:#3a7bd5}
+::selection{background:#fff9c4}
+:focus-visible{outline:2px solid var(--kakao-yellow-dark);outline-offset:2px}
+
+/* ---------- 전체 ---------- */
+#app{
+  background:#fff;
+}
+
+/* ---------- 사이드바 = 카톡 채팅 목록 ---------- */
+.sidebar{
+  background:#fff;
+  border-right:1px solid var(--line);
+}
+.brand{border-bottom:1px solid var(--line-soft)}
+.brand .logo{
+  background:var(--kakao-yellow);
+  border-radius:50%;
+  display:grid; place-items:center;
+}
+.brand b{font-size:16px; color:#191919}
+.brand small{color:#8e8e8e}
+.rooms .label{
+  color:#8e8e8e; font-weight:700; font-size:11px;
+  letter-spacing:.06em;
+}
+.room{
+  color:#191919; border-radius:10px;
+}
+.room:hover{background:#f5f5f5}
+.room.active{background:var(--kakao-yellow); color:#191919}
+.room.active .hash{color:#191919}
+.room.active .rname{color:#191919}
+.room.active .rdesc{color:rgba(25,25,25,.6)}
+.room .rdesc{color:#8e8e8e}
+.room .cnt{background:#ff3b30; color:#fff}
+.sidefoot{border-top:1px solid var(--line-soft)}
+.sidefoot .who{color:#8e8e8e}
+.sidefoot .who .dot{background:var(--ok)}
+.sidefoot .who .dot.off{background:#ef4444}
+.sidefoot a{color:#8e8e8e}
+.sidefoot a:hover{color:#191919}
+
+/* ---------- 메인 · 상단바 ---------- */
+.main{background:#fff}
+.topbar{
+  background:#fff;
+  border-bottom:1px solid var(--line);
+}
+.menu-btn{color:#8e8e8e}
+.roomtitle h1{font-size:16px; color:#191919}
+.roomtitle h1 .hash{color:#8e8e8e}
+.roomtitle p{color:#8e8e8e}
+.pill{background:#fff; border:1px solid var(--line); color:#8e8e8e}
+.pill.live{color:#191919; border-color:var(--kakao-yellow-dark); background:#fffde7}
+.members-btn{
+  background:var(--kakao-yellow); border:0; color:#191919;
+  box-shadow:none;
+}
+.members-btn:hover{background:#f5dc00}
+.members-btn .stack img,.members-btn .stack span{border-color:#fff; background:#fff}
+
+/* ---------- 멤버 상태 패널 (친구 목록) ---------- */
+.scrim{background:rgba(0,0,0,.35)}
+.panel{
+  background:#fff; border-left:1px solid var(--line);
+  box-shadow:-14px 0 34px rgba(0,0,0,.12);
+}
+.panel header{border-bottom:1px solid var(--line-soft)}
+.panel header b{font-size:16px; color:#191919}
+.panel header small{color:#8e8e8e}
+.panel header button{color:#8e8e8e}
+.prow{border-radius:12px}
+.prow:hover{background:#f5f5f5}
+.prow .pav{
+  border-radius:50%;
+  background:#f0f0f0; border:1px solid var(--line-soft);
+}
+.prow .pname{color:#191919}
+.prow .prole{color:#8e8e8e}
+.prow .pstate{color:#8e8e8e}
+.prow .pstate b{color:#0d9a70}
+.prow .pstate.idle b{color:#aaa}
+.panel footer{border-top:1px solid var(--line-soft); color:#aaa}
+
+/* ---------- 프로필 아바타 = 동그란 카톡 프로필 ---------- */
+.avatar{
+  border-radius:50%;
+  border:1px solid rgba(0,0,0,.06);
+  background:#f0f0f0;
+  box-shadow:none;
+}
+
+/* ---------- 메시지 목록 = 카톡 채팅 배경 ---------- */
+.messages{
+  background:var(--chat-bg);
+}
+.daysep{color:rgba(25,25,25,.55)}
+.daysep:before,.daysep:after{background:rgba(25,25,25,.18); height:1px}
+[data-skin="dark"] .daysep{color:rgba(236,239,244,.6)}
+[data-skin="dark"] .daysep:before,[data-skin="dark"] .daysep:after{background:rgba(236,239,244,.25)}
+
+/* 메시지 행: 카톡처럼 아바타 + 이름 + 흰 말풍선 */
+.msg{
+  background:transparent;
+  padding:7px 8px;
+}
+.msg:hover{background:rgba(255,255,255,.18)}
+.msg.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%{background:rgba(254,229,0,.45)}100%{background:transparent}}
+.meta .who{font-size:13px; color:#191919}
+[data-skin="dark"] .meta .who{color:#eceff4}
+.badge{background:rgba(255,255,255,.75); border:1px solid rgba(0,0,0,.08); color:#8e8e8e}
+.time{color:rgba(25,25,25,.5)}
+[data-skin="dark"] .time{color:rgba(236,239,244,.55)}
+
+/* 본문 = 흰 말풍선 (왼쪽 위 꼬리) */
+.content{
+  display:inline-block;
+  background:var(--bubble-other);
+  border:1px solid rgba(0,0,0,.06);
+  border-radius:4px 14px 14px 14px;
+  padding:8px 12px;
+  box-shadow:0 1px 1px rgba(0,0,0,.08);
+  max-width:100%;
+}
+.content code{background:#f5f5f5; border:1px solid var(--line); color:#191919}
+.content pre{background:#f5f5f5; border:1px solid var(--line)}
+.mention{color:#3a7bd5; background:#e8f1fd}
+.replyq{
+  border-left:3px solid rgba(0,0,0,.2); background:rgba(255,255,255,.55);
+  color:#8e8e8e;
+}
+.replyq:hover{background:rgba(255,255,255,.8)}
+.replyq b{color:#191919}
+.replybtn{background:rgba(255,255,255,.85); border:1px solid rgba(0,0,0,.1); color:#8e8e8e}
+.empty{color:rgba(25,25,25,.55)}
+[data-skin="dark"] .empty{color:rgba(236,239,244,.6)}
+.att-img-wrap{border:1px solid rgba(0,0,0,.08); box-shadow:0 1px 2px rgba(0,0,0,.1)}
+.att-file{background:#fff; border:1px solid rgba(0,0,0,.08); color:#191919; box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.att-file:hover{border-color:var(--kakao-yellow-dark); background:#fffde7}
+.att-file span{color:#8e8e8e}
+
+/* 내 메시지 (앱에서 .mine을 붙여줄 때만 적용): 노란 말풍선 · 오른쪽 정렬 */
+.msg.mine{
+  flex-direction:row-reverse;
+}
+.msg.mine .avatar{display:none}
+.msg.mine .body{text-align:right}
+.msg.mine .meta{justify-content:flex-end}
+.msg.mine .content{
+  background:var(--bubble-mine);
+  border-color:rgba(0,0,0,.04);
+  border-radius:14px 4px 14px 14px;
+  text-align:left;
+}
+.msg.mine .replyq{text-align:left}
+
+/* ---------- 작성창 = 카톡 입력창 ---------- */
+.composer{
+  background:#fff;
+  border-top:1px solid var(--line);
+}
+.replybar{background:#f5f5f5; border:1px solid var(--line); color:#8e8e8e}
+.replybar b{color:#191919}
+.replybar .x{color:#8e8e8e}
+.attachbar{background:#f5f5f5; border:1px solid var(--line); color:#8e8e8e}
+.attachbar b{color:#191919}
+.attachbar .x{color:#8e8e8e}
+.attachbtn{background:#f5f5f5; border:1px solid var(--line); color:#191919}
+.attachbtn:hover{border-color:var(--kakao-yellow-dark); background:#fffde7}
+select#senderSel{background:#fff; color:#191919; border:1px solid var(--line)}
+#input{
+  background:#fff; color:#191919;
+  border:1px solid #d9d9d9; border-radius:18px;
+}
+#input:focus{border-color:var(--kakao-yellow-dark); box-shadow:0 0 0 3px rgba(254,229,0,.25)}
+#input::placeholder{color:#b0b0b0}
+#sendBtn{
+  background:var(--kakao-yellow); border:0; color:#191919;
+  border-radius:18px; font-weight:700;
+}
+#sendBtn:hover{background:#f5dc00}
+#sendBtn:disabled{opacity:.45}
+.hint{color:#b0b0b0}
+
+/* ---------- 입장 화면 = 카톡 로그인 느낌 ---------- */
+.gate{
+  background:var(--kakao-yellow);
+}
+.gate .card{
+  background:#fff; border:0; border-radius:16px;
+  box-shadow:0 8px 30px rgba(60,30,30,.18);
+}
+.gate h2{color:#191919}
+.gate p{color:#8e8e8e}
+.gate input{background:#f5f5f5; border:1px solid var(--line); color:#191919}
+.gate input:focus{border-color:var(--kakao-yellow-dark); box-shadow:0 0 0 3px rgba(254,229,0,.25)}
+.gate input::placeholder{color:#b0b0b0}
+.gate button{background:#191919; color:#fff}
+.gate .err{color:#d92d20}
+
+/* ---------- 스크롤바 ---------- */
+.messages::-webkit-scrollbar,.rooms::-webkit-scrollbar,.plist::-webkit-scrollbar{width:8px}
+.messages::-webkit-scrollbar-thumb,.rooms::-webkit-scrollbar-thumb,.plist::-webkit-scrollbar-thumb{
+  background:rgba(0,0,0,.18); border-radius:8px; border:2px solid transparent; background-clip:content-box;
+}
+.messages::-webkit-scrollbar-thumb:hover,.rooms::-webkit-scrollbar-thumb:hover,.plist::-webkit-scrollbar-thumb:hover{
+  background:rgba(0,0,0,.3); background-clip:content-box;
+}
+
+/* ---------- 모바일 ---------- */
+@media (max-width:760px){
+  .sidebar{box-shadow:0 0 40px rgba(0,0,0,.18)}
+  body.nav-open:after{background:rgba(0,0,0,.35)}
+  .messages{padding:12px 10px 6px}
+  .msg{padding:7px 6px}
+  .composer{padding:9px 10px calc(12px + env(safe-area-inset-bottom))}
+  #senderSel{max-width:88px; font-size:12.5px; padding:9px 4px}
+  #sendBtn{padding:10px 14px}
+  .replybtn{color:#8e8e8e}
+}
+
+/* ---------- 움직임 줄이기 ---------- */
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.01ms !important; transition-duration:.01ms !important}
+}

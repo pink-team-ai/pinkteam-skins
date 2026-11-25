@@ -1,0 +1,526 @@
+/* ==========================================================================
+   핑크팀 회의실 — 싸이월드 스킨 v3 (cyworld-skin-v3.css)
+   --------------------------------------------------------------------------
+   [v1 / v2와 뭐가 다른가]
+   v1은 색·폰트만 바꿨고, v2는 깔끔한 분홍 미니홈피라 싸이월드 느낌이 안 났습니다.
+   v3는 진짜 싸이월드 미니홈피의 감각을 회의실 도구에 맞게 옮겼습니다.
+   레퍼런스를 그대로 베끼지 않고, 회의실이라는 본질은 유지합니다.
+     - 하늘 + 구름 + 비눗방울 배경, 노란 격자(깅엄) 벽지 프레임
+     - 미니룸 일러스트는 사이드바 위쪽에 (가운데가 아님)
+     - 카테고리 메뉴 = 우리 방 목록 5개, 싸이월드식 파란 탭
+     - TODAY 영역에 AI 접속 상태 (실제 연결 상태 요소 활용, 가짜 숫자 없음)
+     - 프로필 = 대장(핑크) + 싸이 기본 프로필 이미지(실루엣)
+     - 멤버 아이콘 = 싸이 미니미 느낌 (마스코트 png 대신, 멤버별 색·이모지로 구분)
+   JS·HTML·기능은 하나도 건드리지 않습니다. CSS만으로 바꿉니다.
+
+   [붙이는 방법]
+   1) 이 파일을 회의실 index.html과 같은 폴더에 넣습니다.
+   2) index.html의 <head> 안에서, 기존 <style> 블록 "뒤"에 아래 한 줄을 넣습니다.
+      (순서가 중요합니다. 스킨이 나중에 와야 원래 색을 덮어씁니다.)
+        <link rel="stylesheet" href="cyworld-skin-v3.css">
+   3) <html> 태그에 data-skin 속성을 넣습니다. 기본값은 classic(진짜 싸이월드)입니다.
+        <html lang="ko" data-skin="classic">
+   4) Jua / Gowun Dodum 글꼴을 쓰려면 <head>에 아래 두 줄도 넣습니다.
+      (없어도 시스템 글꼴로 보여요.)
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+
+   [스킨 색 바꾸기]
+   data-skin 값만 바꾸면 됩니다.
+     classic = 진짜 싸이월드 (기본: 노란 격자 + 하늘 + 파란 탭)
+     pink    = 핑크핑크        soda = 하늘소다        mint = 민트초코
+
+   [빼는 방법(롤백)]
+   <link rel="stylesheet" href="cyworld-skin-v3.css"> 한 줄과
+   data-skin 속성만 지우면 원래 다크 테마로 돌아갑니다.
+   v1(cyworld-skin.css)·v2(cyworld-skin-v2.css) 파일은 건드리지 않았습니다.
+
+   [주의] 이 파일에는 API 키·비밀번호·토큰이 없습니다. 넣지도 마세요.
+   'TODAY' 영역은 실제 연결 상태 요소(.who)를 보여주는 것이고,
+   접속 중인 AI 목록은 멤버 패널(일촌 목록)에서 각자 상태를 확인합니다.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap');
+
+/* ---------- 스킨 색 (기본: classic = 진짜 싸이월드) ---------- */
+:root{
+  --sky1:#6fb9e8; --sky2:#a9d9ec; --sky3:#d9f1fc;
+  --gingham:#ffd94d; --gingham-line:#e8a90c;
+  --tab:#2b7cd3; --tab-dark:#1a5fa8; --tab-soft:#e8f6fd;
+  --accent:#ff9f1c; --accent-dark:#e85d0c; --accent-soft:#fff1e6;
+  --pink:#ff7eb6; --pink-dark:#e83a6b;
+  --panel:#ffffff; --line:#bcd8ea; --line-soft:#dcebf7;
+  --text:#333333; --muted:#6b7c8c;
+  --dotgrid:rgba(43,124,211,.16);
+  --floor:#ffc2d6; --floor-line:#e87ea8;
+  --ok:#0d9a70; --warn:#d97706;
+  --radius:12px;
+  color-scheme:light;
+}
+[data-skin="classic"]{
+  --sky1:#6fb9e8; --sky2:#a9d9ec; --sky3:#d9f1fc;
+  --gingham:#ffd94d; --gingham-line:#e8a90c;
+  --tab:#2b7cd3; --tab-dark:#1a5fa8; --tab-soft:#e8f6fd;
+  --accent:#ff9f1c; --accent-dark:#e85d0c; --accent-soft:#fff1e6;
+}
+[data-skin="pink"]{
+  --sky1:#ffb3cd; --sky2:#ffd6e3; --sky3:#ffeaf1;
+  --gingham:#ffc2d6; --gingham-line:#e87ea8;
+  --tab:#ff4f81; --tab-dark:#e83a6b; --tab-soft:#fff0f4;
+  --accent:#ff9f1c; --accent-dark:#e85d0c; --accent-soft:#fff1e6;
+  --floor:#ffd94d; --floor-line:#e8a90c;
+}
+[data-skin="soda"]{
+  --sky1:#7cc4e8; --sky2:#a8d8ea; --sky3:#d9f1fc;
+  --gingham:#a8d8ea; --gingham-line:#5aa8d0;
+  --tab:#1a9bd8; --tab-dark:#0f84bd; --tab-soft:#e8f6fd;
+  --accent:#ff9f1c; --accent-dark:#e85d0c; --accent-soft:#fff1e6;
+}
+[data-skin="mint"]{
+  --sky1:#8fd8b8; --sky2:#bfead9; --sky3:#e2f7ee;
+  --gingham:#bfead9; --gingham-line:#7cc4a5;
+  --tab:#14b887; --tab-dark:#0d9a70; --tab-soft:#e6f8f2;
+  --accent:#ff9f1c; --accent-dark:#e85d0c; --accent-soft:#fff1e6;
+}
+
+/* ---------- 바탕: 하늘 + 구름 + 비눗방울 ---------- */
+body{
+  color:var(--text);
+  font-family:"Gowun Dodum","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  background:
+    radial-gradient(ellipse 340px 90px at 12% 10%, rgba(255,255,255,.95), transparent 70%),
+    radial-gradient(ellipse 280px 80px at 82% 6%, rgba(255,255,255,.9), transparent 70%),
+    radial-gradient(ellipse 240px 70px at 62% 22%, rgba(255,255,255,.55), transparent 70%),
+    radial-gradient(ellipse 200px 60px at 30% 34%, rgba(255,255,255,.4), transparent 70%),
+    radial-gradient(circle 12px at 6% 62%, rgba(255,255,255,.65), transparent 70%),
+    radial-gradient(circle 9px at 94% 52%, rgba(255,255,255,.6), transparent 70%),
+    radial-gradient(circle 16px at 88% 82%, rgba(255,255,255,.5), transparent 70%),
+    linear-gradient(180deg, var(--sky1), var(--sky2) 55%, var(--sky3));
+}
+a{color:var(--tab-dark)}
+::selection{background:var(--tab-soft)}
+:focus-visible{outline:2px solid var(--tab);outline-offset:2px}
+
+/* 위쪽 타이틀: 미니홈피 이름 (진짜 싸이월드 상단 타이틀처럼) */
+body::before{
+  content:"핑크팀 미니홈피";
+  position:fixed; top:8px; left:0; right:0; z-index:0;
+  text-align:center; pointer-events:none;
+  font-family:"Jua","Gowun Dodum",sans-serif;
+  font-size:30px; letter-spacing:.04em; color:#fff;
+  text-shadow:0 2px 0 rgba(26,95,168,.35), 0 4px 12px rgba(26,95,168,.25);
+}
+/* 떠다니는 비눗방울 (움직이는 장식층, 클릭 안 됨) */
+body::after{
+  content:"";
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    radial-gradient(circle 11px at 10% 72%, rgba(255,255,255,.55), rgba(255,255,255,.06) 70%, transparent 72%),
+    radial-gradient(circle 7px at 22% 84%, rgba(255,255,255,.5), rgba(255,255,255,.05) 70%, transparent 72%),
+    radial-gradient(circle 14px at 78% 68%, rgba(255,255,255,.5), rgba(255,255,255,.05) 70%, transparent 72%),
+    radial-gradient(circle 8px at 90% 86%, rgba(255,255,255,.55), rgba(255,255,255,.05) 70%, transparent 72%),
+    radial-gradient(circle 6px at 55% 90%, rgba(255,255,255,.45), rgba(255,255,255,.05) 70%, transparent 72%);
+  animation:bubble-float 9s ease-in-out infinite alternate;
+}
+@keyframes bubble-float{
+  from{transform:translateY(0)}
+  to{transform:translateY(-14px)}
+}
+
+/* ---------- 전체 = 노란 격자 벽지의 미니홈피 창 ---------- */
+#app{
+  position:relative; z-index:1;
+  width:auto;
+  height:calc(100dvh - 68px);
+  margin:54px 12px 12px;
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.5) 0 16px, transparent 16px 32px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.5) 0 16px, transparent 16px 32px),
+    linear-gradient(var(--gingham), var(--gingham));
+  border:2px solid var(--gingham-line);
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(26,95,168,.28);
+  overflow:hidden;
+  padding:12px;
+  gap:12px;
+}
+
+/* ---------- 사이드바 = 미니홈피 왼쪽 컬럼 ---------- */
+.sidebar{
+  background:#fff;
+  border:2px solid #7fb6d9;
+  border-radius:12px;
+  box-shadow:3px 3px 0 rgba(26,95,168,.12);
+}
+/* 순서: 미니룸 → 프로필 → 방 목록(카테고리) → TODAY */
+.sidebar .roomsline{order:-2}
+.sidebar .brand{order:-1}
+.sidebar .rooms{order:0}
+.sidebar .sidefoot{order:1}
+
+/* ----- 미니룸 일러스트 패널 (사이드바 맨 위, .roomsline 재활용) ----- */
+.roomsline{
+  flex:none;
+  height:150px;
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(#bfe3f2 0 62%, #f2c98a 62% 100%);
+  border:2px solid #7fb6d9;
+  border-radius:12px;
+}
+/* 아치형 창문 */
+.roomsline::before{
+  content:"";
+  position:absolute; left:14px; top:12px;
+  width:56px; height:62px;
+  background:
+    linear-gradient(90deg, transparent 47%, #7fb6d9 47% 53%, transparent 53%),
+    linear-gradient(0deg, transparent 47%, #7fb6d9 47% 53%, transparent 53%),
+    linear-gradient(#eaf6fd, #d8eefb);
+  border:2px solid #7fb6d9;
+  border-radius:28px 28px 4px 4px;
+}
+/* 소파·곰·화분 (바닥 위 소품) */
+.roomsline::after{
+  content:"🛋️🧸🪴";
+  position:absolute; right:10px; bottom:6px;
+  font-size:26px; letter-spacing:2px; line-height:1;
+}
+
+/* ----- 프로필 = 대장(핑크) + 싸이 기본 이미지 ----- */
+.brand{
+  flex-wrap:wrap;
+  background:#fff;
+  border:2px solid #7fb6d9;
+  border-radius:12px;
+  box-shadow:2px 2px 0 rgba(26,95,168,.10);
+  padding:10px;
+}
+.brand::before{
+  content:"♥ 대장 프로필";
+  flex:0 0 100%;
+  font-family:"Jua","Gowun Dodum",sans-serif;
+  font-size:12px; color:var(--tab-dark);
+  margin-bottom:2px;
+}
+/* 싸이 기본 프로필 이미지: 사진도 마스코트도 아닌 심플한 실루엣 */
+.brand .logo{
+  flex:0 0 46px; width:46px; height:46px;
+  font-size:0; line-height:0; color:transparent;
+  border:2px solid #7fb6d9; border-radius:10px;
+  background-color:#dfe9f2;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23dfe9f2'/%3E%3Ccircle cx='32' cy='25' r='12' fill='%238a97a5'/%3E%3Cpath d='M8 64c3-15 13-22 24-22s21 7 24 22z' fill='%238a97a5'/%3E%3C/svg%3E");
+  background-size:cover; background-position:center;
+}
+.brand b{font-family:"Jua","Gowun Dodum",sans-serif;font-size:16px;color:#222}
+.brand small{color:#8a8378}
+
+/* ----- 카테고리 = 우리 방 목록 (싸이월드식 파란 탭) ----- */
+.rooms .label{font-size:0; line-height:1; padding:2px 8px 8px}
+.rooms .label::before{
+  content:"■ 카테고리";
+  font-size:12px; font-weight:800; letter-spacing:.02em;
+  color:var(--tab-dark);
+}
+.room{
+  background:var(--tab); color:#fff;
+  border:1.5px solid var(--tab-dark); border-radius:8px;
+  margin-bottom:5px; padding:9px 10px;
+  box-shadow:2px 2px 0 rgba(26,95,168,.16);
+}
+.room:hover{background:#3b8de0}
+.room.active{
+  background:var(--accent); border-color:var(--accent-dark); color:#fff;
+  box-shadow:2px 2px 0 rgba(232,93,12,.28);
+}
+.room .hash{color:rgba(255,255,255,.75); font-size:14px}
+.room.active .hash{color:rgba(255,255,255,.85)}
+.room .rname{color:#fff}
+.room .rdesc{color:rgba(255,255,255,.78)}
+.room .cnt{background:#fff; color:var(--accent-dark)}
+.room.active .cnt{background:#fff; color:var(--accent-dark)}
+
+/* ----- TODAY 영역 = AI 접속 상태 (실제 연결 상태 요소 활용) ----- */
+.sidefoot{
+  background:#fff;
+  border:2px solid #7fb6d9;
+  border-radius:12px;
+  padding:10px;
+}
+.sidefoot::before{
+  content:"TODAY · 접속 중";
+  display:block;
+  font-family:"Jua","Gowun Dodum",sans-serif;
+  font-size:13px; color:#fff; text-align:center;
+  background:var(--tab);
+  border-radius:8px;
+  padding:5px 8px;
+  margin-bottom:8px;
+}
+.sidefoot .who{color:#333; font-size:12.5px}
+.sidefoot .who .dot{background:var(--ok)}
+.sidefoot .who .dot.off{background:#ef4444}
+.sidefoot a{color:var(--tab-dark)}
+.sidefoot a:hover{color:var(--accent-dark)}
+/* 멤버 상태 링크 = 일촌 접속 상태 보기 버튼 */
+.sidefoot a#membersLink{
+  display:block; text-align:center;
+  background:var(--tab-soft);
+  border:1.5px solid var(--tab);
+  border-radius:8px;
+  padding:6px 8px;
+  font-weight:700;
+}
+
+/* ---------- 가운데: 회의실 본체 ---------- */
+.main{
+  background:#fff;
+  border:2px solid #7fb6d9;
+  border-radius:12px;
+  box-shadow:3px 3px 0 rgba(26,95,168,.12);
+  overflow:hidden;
+}
+
+/* ---------- 상단바 = 미니홈피 헤더 ---------- */
+.topbar{
+  background:#fff;
+  border-bottom:2px solid var(--tab);
+}
+.topbar::after{
+  content:"방명록";
+  font-family:"Jua","Gowun Dodum",sans-serif;
+  font-size:12px; color:var(--tab-dark);
+  background:var(--tab-soft);
+  border:1.5px solid var(--tab);
+  border-radius:999px;
+  padding:3px 10px;
+  white-space:nowrap;
+}
+.menu-btn{color:var(--tab-dark)}
+.roomtitle h1{
+  font-family:"Jua","Gowun Dodum",sans-serif;
+  font-size:20px; letter-spacing:.01em; color:var(--tab-dark);
+}
+.roomtitle h1 .hash{color:var(--tab)}
+.roomtitle p{color:#8a8378}
+.pill{background:#fff; border:1.5px solid var(--tab); color:var(--tab-dark)}
+.pill.live{color:var(--tab-dark); border-color:var(--tab); background:var(--tab-soft)}
+.members-btn{
+  background:var(--tab); border:1.5px solid var(--tab-dark); color:#fff;
+  box-shadow:2px 2px 0 rgba(26,95,168,.20);
+}
+.members-btn:hover{background:#3b8de0}
+.members-btn .stack img,.members-btn .stack span{border-color:#fff; background:var(--tab-soft)}
+
+/* ---------- 멤버 상태 패널 (일촌 목록) ---------- */
+.scrim{background:rgba(26,95,168,.35)}
+.panel{
+  background:#fff; border-left:2px solid #7fb6d9;
+  box-shadow:-14px 0 34px rgba(26,95,168,.20);
+}
+.panel header{border-bottom:2px dotted var(--line)}
+.panel header b{font-family:"Jua","Gowun Dodum",sans-serif; font-size:17px; color:var(--tab-dark)}
+.panel header small{color:#999}
+.panel header button{color:#999}
+.prow{
+  border:1.5px solid var(--line-soft); border-radius:12px;
+  margin-bottom:6px; background:#fff;
+}
+.prow:hover{background:var(--tab-soft); border-color:var(--tab)}
+.prow .pname{color:#222}
+.prow .prole{color:#999}
+.prow .pstate{color:#999}
+.prow .pstate b{color:var(--ok)}
+.prow .pstate.idle b{color:#aaa}
+.panel footer{border-top:2px dotted var(--line); color:#a39a8f}
+
+/* ---------- 멤버 아이콘 = 싸이 미니미 느낌 (마스코트 png 대신) ---------- */
+/* 마스코트 이미지를 숨기고, 이모지 + 파스텔 미니미 프레임으로 교체 */
+.avatar img, .pav img, .members-btn .stack img{display:none !important}
+.avatar, .prow .pav{
+  background:#fff;
+  border:2px solid #7fb6d9;
+  box-shadow:1px 1px 0 rgba(26,95,168,.14);
+}
+.avatar .ava-emoji, .prow .pav .ava-emoji{font-size:20px; line-height:1}
+/* 메시지 아바타: 보낸 사람별 파스텔 프레임 (인라인 색상 기준, 못 찾으면 기본값) */
+.msg:nth-child(5n+1) .avatar{background:#ffe3ec; border-color:#ff8fb0}
+.msg:nth-child(5n+2) .avatar{background:#dbeafe; border-color:#7cc4ff}
+.msg:nth-child(5n+3) .avatar{background:#fef3c7; border-color:#f5c542}
+.msg:nth-child(5n+4) .avatar{background:#d1fae5; border-color:#6ee7b7}
+.msg:nth-child(5n+0) .avatar{background:#ede9fe; border-color:#c4b5fd}
+.msg:has(.meta .who[style*="#ff8fb0"]) .avatar{background:#ffe3ec; border-color:#ff8fb0}
+.msg:has(.meta .who[style*="#7cc4ff"]) .avatar{background:#dbeafe; border-color:#7cc4ff}
+.msg:has(.meta .who[style*="#ffd166"]) .avatar{background:#fef3c7; border-color:#f5c542}
+.msg:has(.meta .who[style*="#9ae6b4"]) .avatar{background:#d1fae5; border-color:#6ee7b7}
+/* 일촌 목록: 행 순서대로 6종 파스텔 미니미를 돌려 씀 (18명 전원 구분) */
+.prow:nth-child(6n+1) .pav{background:#ffe3ec; border-color:#ff8fb0}
+.prow:nth-child(6n+2) .pav{background:#dbeafe; border-color:#7cc4ff}
+.prow:nth-child(6n+3) .pav{background:#fef3c7; border-color:#f5c542}
+.prow:nth-child(6n+4) .pav{background:#d1fae5; border-color:#6ee7b7}
+.prow:nth-child(6n+5) .pav{background:#ede9fe; border-color:#c4b5fd}
+.prow:nth-child(6n+0) .pav{background:#ffedd5; border-color:#fdba74}
+/* 상단 멤버 버튼 스택: 미니 칩 */
+.members-btn .stack span{
+  background:#fff; color:#333;
+  border:1.5px solid #fff; border-radius:50%;
+  display:inline-grid; place-items:center;
+}
+
+/* ---------- 메시지 목록 = 도트 격자 위의 방명록 ---------- */
+.messages{
+  background:
+    radial-gradient(circle at 1px 1px, var(--dotgrid) 1.2px, transparent 0) 0 0/20px 20px,
+    #fff;
+}
+.daysep{color:var(--tab-dark)}
+.daysep:before,.daysep:after{background:transparent; border-top:1px dotted var(--line); height:0}
+.msg{
+  background:#fff;
+  border:1.5px solid var(--line);
+  border-radius:10px;
+  padding:10px 12px;
+  margin-bottom:8px;
+  box-shadow:2px 2px 0 rgba(43,124,211,.07);
+}
+.msg:hover{background:#f2f9ff; border-color:var(--tab)}
+.msg.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%{background:var(--tab-soft)}100%{background:transparent}}
+.meta .who{font-family:"Jua","Gowun Dodum",sans-serif; font-size:15px; color:inherit}
+.badge{background:#fff; border:1px solid var(--line); color:#8a8378; border-radius:999px}
+.time{color:#a39a8f}
+.content code{background:#eef6fd; border:1px solid var(--line); color:#333}
+.content pre{background:#f7f3ef; border:1px solid var(--line)}
+.mention{color:var(--tab-dark); background:var(--tab-soft)}
+.replyq{
+  border-left:3px solid var(--tab); background:#eef6fd; color:#8a8378;
+}
+.replyq:hover{background:var(--tab-soft)}
+.replyq b{color:#222}
+.replybtn{background:#fff; border:1.5px solid var(--tab); color:var(--tab-dark)}
+.empty{color:#a39a8f}
+
+/* ---------- 작성창 = 격자 바닥 위의 방명록 쓰기 ---------- */
+.composer{
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.5) 0 14px, transparent 14px 28px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.5) 0 14px, transparent 14px 28px),
+    linear-gradient(var(--floor), var(--floor));
+  border-top:2px solid var(--floor-line);
+}
+.composer::before{
+  content:"✍ 방명록 쓰기";
+  display:block;
+  font-family:"Jua","Gowun Dodum",sans-serif;
+  font-size:14px;
+  color:var(--tab-dark);
+  background:#fff;
+  border:1.5px solid var(--tab);
+  border-radius:999px;
+  padding:4px 12px;
+  margin-bottom:8px;
+  width:max-content;
+}
+.replybar{background:#fff; border:1.5px solid var(--line); color:#8a8378}
+.replybar b{color:#222}
+.replybar .x{color:#999}
+.attachbar{background:#fff; border:1.5px solid var(--line); color:#8a8378}
+.attachbar b{color:#222}
+.attachbar .x{color:#999}
+.attachbtn{background:#fff; border:1.5px solid var(--tab); color:var(--tab-dark)}
+.attachbtn:hover{border-color:var(--accent); background:var(--accent-soft)}
+.att-img-wrap{border:1.5px solid var(--tab); box-shadow:3px 3px 0 rgba(26,95,168,.14)}
+.att-file{background:#fff; border:1.5px solid var(--tab); color:#222; box-shadow:2px 2px 0 rgba(26,95,168,.12)}
+.att-file:hover{border-color:var(--accent); background:var(--accent-soft)}
+.att-file span{color:#999}
+select#senderSel{background:#fff; color:#222; border:1.5px solid var(--tab)}
+#input{background:#fff; color:#222; border:1.5px solid var(--tab)}
+#input:focus{border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+#input::placeholder{color:#b0a89d}
+#sendBtn{
+  background:var(--accent); border:2px solid var(--accent-dark); color:#fff;
+  font-family:"Jua","Gowun Dodum",sans-serif; font-size:15px;
+  border-radius:12px; padding:10px 16px;
+  box-shadow:3px 3px 0 rgba(232,93,12,.25);
+}
+#sendBtn::before{content:"🌰 "}
+#sendBtn:disabled{opacity:.55}
+.hint{color:#8a7a80}
+
+/* ---------- 입장 화면 = 미니홈피 표지 ---------- */
+.gate{
+  background:
+    radial-gradient(ellipse 340px 90px at 12% 10%, rgba(255,255,255,.95), transparent 70%),
+    radial-gradient(ellipse 280px 80px at 82% 6%, rgba(255,255,255,.9), transparent 70%),
+    radial-gradient(circle 12px at 6% 62%, rgba(255,255,255,.65), transparent 70%),
+    radial-gradient(circle 9px at 94% 52%, rgba(255,255,255,.6), transparent 70%),
+    linear-gradient(180deg, var(--sky1), var(--sky2) 55%, var(--sky3));
+}
+.gate .card{
+  background:#fff; border:3px solid var(--gingham-line); border-radius:18px;
+  box-shadow:0 0 0 6px #fff, 8px 8px 0 rgba(26,95,168,.18);
+  overflow:hidden;
+}
+.gate .card::before{
+  content:"♥ 핑크팀 미니홈피";
+  display:block;
+  background:var(--tab);
+  color:#fff;
+  font-family:"Jua","Gowun Dodum",sans-serif;
+  font-size:16px; text-align:center;
+  padding:10px 12px;
+  margin:-24px -22px 16px;
+  border-bottom:2px solid var(--tab-dark);
+}
+.gate h2{font-family:"Jua","Gowun Dodum",sans-serif; font-size:20px; color:var(--tab-dark)}
+.gate p{color:#8a8378}
+.gate input{background:#fff; border:1.5px solid var(--tab); color:#222}
+.gate input:focus{border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.gate input::placeholder{color:#b0a89d}
+.gate button{
+  background:var(--accent); border:2px solid var(--accent-dark); color:#fff;
+  box-shadow:2px 2px 0 rgba(232,93,12,.25);
+}
+.gate .err{color:#d92d20}
+
+/* ---------- 스크롤바 ---------- */
+.messages::-webkit-scrollbar,.rooms::-webkit-scrollbar,.plist::-webkit-scrollbar{width:10px}
+.messages::-webkit-scrollbar-thumb,.rooms::-webkit-scrollbar-thumb,.plist::-webkit-scrollbar-thumb{
+  background:#bcd8ea; border-radius:8px; border:2px solid #fff;
+}
+.messages::-webkit-scrollbar-thumb:hover,.rooms::-webkit-scrollbar-thumb:hover,.plist::-webkit-scrollbar-thumb:hover{
+  background:var(--tab);
+}
+
+/* ---------- 모바일 ---------- */
+@media (max-width:760px){
+  body::before{font-size:20px; top:6px}
+  #app{
+    margin:40px 8px 8px;
+    height:calc(100dvh - 48px);
+    border-radius:14px;
+    padding:8px;
+    gap:8px;
+  }
+  .roomsline{height:120px}
+  .roomsline::after{font-size:22px}
+  .sidebar{
+    border:2px solid #7fb6d9;
+    box-shadow:6px 0 0 rgba(26,95,168,.14);
+  }
+  body.nav-open:after{background:rgba(26,95,168,.35)}
+  .topbar::after{display:none}
+  .messages{padding:10px 10px 6px}
+  .msg{padding:9px 10px}
+  .composer::before{font-size:13px}
+  .composer{padding:9px 10px calc(12px + env(safe-area-inset-bottom))}
+  .replybtn{color:var(--tab-dark)}
+  #senderSel{max-width:88px; font-size:12.5px; padding:9px 4px}
+  #sendBtn{padding:10px 12px}
+}
+
+/* ---------- 움직임 줄이기 ---------- */
+@media (prefers-reduced-motion: reduce){
+  body::after{animation:none}
+  *{animation-duration:.01ms !important; transition-duration:.01ms !important}
+}

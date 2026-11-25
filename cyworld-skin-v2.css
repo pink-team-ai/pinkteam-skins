@@ -1,0 +1,354 @@
+/* ==========================================================================
+   핑크팀 회의실 — 싸이월드 스킨 v2 (cyworld-skin-v2.css)
+   --------------------------------------------------------------------------
+   [v1과의 차이]
+   v1은 색·폰트만 바꿔서 방 구조가 원래 그대로라 싸이월드 느낌이 안 났습니다.
+   v2는 CSS만으로 구조감을 바꿉니다. JS·HTML·기능은 하나도 건드리지 않습니다.
+     - 회의실 전체를 흰 미니홈피 창으로 (두꺼운 테두리 + 하드 섀도우)
+     - 사이드바를 프로필 컬럼으로 (브랜드 = 프로필 박스, 방 목록 = 탭)
+     - 상단바를 미니홈피 헤더로 (액센트 바탕 + Jua 제목 + 점선 경계)
+     - 메시지 목록을 방명록 보드로 (글마다 카드, 아바타 테두리 강조)
+     - 작성창을 '방명록 쓰기'로 (도토리 보내기 버튼)
+     - 입장 화면을 미니홈피 표지로 (액센트 헤더 띠)
+   방 = 미니홈피, 멤버 = 일촌, 글 = 방명록.
+
+   [붙이는 방법]
+   1) 이 파일을 회의실 index.html과 같은 폴더에 넣습니다.
+   2) index.html의 <head> 안에서, 기존 <style> 블록 "뒤"에 아래 한 줄을 넣습니다.
+      (순서가 중요합니다. 스킨이 나중에 와야 원래 색을 덮어씁니다.)
+        <link rel="stylesheet" href="cyworld-skin-v2.css">
+   3) <html> 태그에 data-skin 속성을 넣습니다. 기본값은 핑크핑크입니다.
+        <html lang="ko" data-skin="pink">
+   4) Jua / Gowun Dodum 글꼴을 쓰려면 <head>에 아래 두 줄도 넣습니다.
+      (없어도 시스템 글꼴로 보여요.)
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+
+   [스킨 색 바꾸기]
+   data-skin 값만 바꾸면 됩니다. (v1과 같은 변수 구조)
+     pink    = 핑크핑크 (기본)     classic = 클래식 오렌지
+     soda    = 하늘소다            mint    = 민트초코
+   또는 아래 :root 변수 6개(--bg, --bg2, --accent, --accent-dark,
+   --accent-soft, --accent-dim)만 직접 고쳐도 됩니다.
+
+   [빼는 방법(롤백)]
+   <link rel="stylesheet" href="cyworld-skin-v2.css"> 한 줄과
+   data-skin 속성만 지우면 원래 다크 테마로 돌아갑니다.
+   v1 스킨 파일(cyworld-skin.css)은 건드리지 않았습니다. v1으로 돌아가려면
+   위 2)번의 파일 이름만 cyworld-skin.css로 바꾸면 됩니다.
+
+   [주의] 이 파일에는 API 키·비밀번호·토큰이 없습니다. 넣지도 마세요.
+   'TODAY IS...' 문구는 장식 라벨일 뿐, 실제 카운터 숫자는 없습니다.
+   ========================================================================== */
+
+/* ---------- 스킨 색 (기본: 핑크핑크, v1과 같은 변수 구조) ---------- */
+:root{
+  --bg:#ffd6e3; --bg2:#ffeaf1;
+  --panel:#ffffff; --panel2:#fffaf5; --line:#e5ddd5;
+  --text:#222222; --muted:#777777;
+  --accent:#ff4f81; --accent-dark:#e83a6b; --accent-soft:#fff0f4; --accent-dim:#fff0f4;
+  --ok:#0d9a70; --warn:#d97706;
+  --radius:14px;
+  color-scheme:light;
+}
+[data-skin="pink"]{
+  --bg:#ffd6e3; --bg2:#ffeaf1;
+  --accent:#ff4f81; --accent-dark:#e83a6b; --accent-soft:#fff0f4; --accent-dim:#fff0f4;
+}
+[data-skin="classic"]{
+  --bg:#f9d976; --bg2:#fdeec2;
+  --accent:#ff6b1a; --accent-dark:#e85d0c; --accent-soft:#fff1e6; --accent-dim:#fff1e6;
+}
+[data-skin="soda"]{
+  --bg:#a8d8ea; --bg2:#d9f1fc;
+  --accent:#1a9bd8; --accent-dark:#0f84bd; --accent-soft:#e8f6fd; --accent-dim:#e8f6fd;
+}
+[data-skin="mint"]{
+  --bg:#bfead9; --bg2:#e2f7ee;
+  --accent:#14b887; --accent-dark:#0d9a70; --accent-soft:#e6f8f2; --accent-dim:#e6f8f2;
+}
+
+/* ---------- 바탕 (도트 무늬 미니홈피 배경) ---------- */
+body{
+  background:
+    radial-gradient(circle at 1px 1px, rgba(255,255,255,.55) 1.2px, transparent 0) 0 0/22px 22px,
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  color:var(--text);
+  font-family:"Gowun Dodum","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+}
+a{color:var(--accent-dark)}
+::selection{background:var(--accent-soft)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ---------- 1. 전체를 미니홈피 창처럼 ---------- */
+#app{
+  width:auto;
+  height:calc(100dvh - 24px);
+  margin:12px;
+  background:#fff;
+  border:2px solid #222;
+  border-radius:18px;
+  box-shadow:6px 6px 0 rgba(0,0,0,.85);
+  overflow:hidden;
+}
+
+/* ---------- 2. 사이드바 = 미니홈피 프로필 컬럼 ---------- */
+.sidebar{
+  background:linear-gradient(180deg, var(--accent-soft), #fff 55%);
+  border-right:2px solid #222;
+}
+/* 브랜드 = 프로필 박스 */
+.brand{
+  background:#fff;
+  border:2px solid #222;
+  border-radius:12px;
+  box-shadow:3px 3px 0 rgba(0,0,0,.15);
+  padding:10px;
+}
+.brand .logo{
+  font-size:26px;line-height:1;
+  background:var(--accent-soft);
+  border:1.5px solid #222;
+  border-radius:10px;
+  padding:4px 6px;
+}
+.brand b{font-family:"Jua","Gowun Dodum",sans-serif;font-size:17px;letter-spacing:.01em}
+.brand small{color:#8a8378}
+/* 방 목록 = 미니홈피 탭 */
+.rooms .label{color:var(--accent-dark);font-weight:800}
+.rooms .label::before{content:"♥ ";color:var(--accent)}
+.room{
+  background:#fff;
+  border:1.5px solid #e5ddd5;
+  border-radius:10px;
+  margin-bottom:4px;
+  padding:9px 10px;
+  color:#444;
+  box-shadow:1px 1px 0 rgba(0,0,0,.05);
+}
+.room:hover{background:var(--accent-soft);border-color:var(--accent)}
+.room.active{
+  background:var(--accent);color:#fff;
+  border:1.5px solid #222;
+  box-shadow:2px 2px 0 rgba(0,0,0,.18);
+}
+.room.active .hash{color:#fff}
+.room.active .rdesc{color:rgba(255,255,255,.85)}
+.room .rdesc{color:#999}
+.room .cnt{background:#222;color:#fff}
+/* 하단 = TODAY IS... 장식 (숫자 없음, 라벨만) */
+.sidefoot{border-top:2px dashed #d8cfc6}
+.sidefoot::before{
+  content:"♥ TODAY IS... 미니홈피";
+  display:block;
+  font-family:"Jua","Gowun Dodum",sans-serif;
+  font-size:12.5px;
+  color:var(--accent-dark);
+  background:var(--accent-soft);
+  border:1.5px dashed var(--accent);
+  border-radius:999px;
+  padding:5px 10px;
+  text-align:center;
+  margin-bottom:10px;
+}
+.sidefoot .who{color:#8a8378}
+.sidefoot a{color:#8a8378}
+.sidefoot a:hover{color:var(--accent-dark)}
+
+/* ---------- 3. 상단바 = 미니홈피 헤더 ---------- */
+.topbar{
+  background:var(--accent);
+  border-bottom:2px dashed rgba(255,255,255,.7);
+  backdrop-filter:none;
+}
+.topbar::after{
+  content:"방명록";
+  font-family:"Jua","Gowun Dodum",sans-serif;
+  font-size:12px;
+  color:#fff;
+  border:1.5px dashed rgba(255,255,255,.85);
+  border-radius:999px;
+  padding:3px 10px;
+  white-space:nowrap;
+}
+.menu-btn{color:#fff}
+.roomtitle h1{
+  font-family:"Jua","Gowun Dodum",sans-serif;
+  font-size:20px;letter-spacing:.01em;color:#fff;
+}
+.roomtitle h1 .hash{color:rgba(255,255,255,.75)}
+.roomtitle p{color:rgba(255,255,255,.85)}
+.pill{background:#fff;border:1.5px solid #222;color:var(--accent-dark)}
+.pill.live{color:var(--accent-dark);border-color:#222;background:#fff}
+.members-btn{
+  background:#fff;border:1.5px solid #222;color:#333;
+  box-shadow:2px 2px 0 rgba(0,0,0,.18);
+}
+.members-btn:hover{border-color:var(--accent);background:var(--accent-soft)}
+.members-btn .stack img,.members-btn .stack span{border-color:#fff;background:#eee}
+
+/* ---------- 멤버 상태 패널 (일촌 목록) ---------- */
+.scrim{background:rgba(34,34,34,.45)}
+.panel{
+  background:#fff;border-left:2px solid #222;
+  box-shadow:-14px 0 34px rgba(0,0,0,.16);
+}
+.panel header{border-bottom:2px dashed #d8cfc6}
+.panel header b{font-family:"Jua","Gowun Dodum",sans-serif;font-size:17px}
+.panel header small{color:#999}
+.panel header button{color:#999}
+.prow{
+  border:1.5px solid #eee;border-radius:12px;
+  margin-bottom:6px;background:#fff;
+}
+.prow:hover{background:var(--accent-soft);border-color:var(--accent)}
+.prow .pav{background:var(--accent-soft);border:2px solid #222;color:#222}
+.prow .prole{color:#999}
+.prow .pstate{color:#999}
+.prow .pstate b{color:#0d9a70}
+.prow .pstate.idle b{color:#aaa}
+.panel footer{border-top:2px dashed #d8cfc6;color:#a39a8f}
+
+/* ---------- 4. 메시지 목록 = 방명록 보드 ---------- */
+.main{background:transparent}
+.messages{
+  background:#fff;
+  border:2px solid #222;
+  border-radius:14px;
+  margin:14px 14px 12px;
+  padding:14px 14px 8px;
+  box-shadow:4px 4px 0 rgba(0,0,0,.12);
+}
+.daysep{color:#a39a8f}
+.daysep:before,.daysep:after{background:transparent;border-top:1px dashed #d8cfc6;height:0}
+.msg{
+  background:#fff;
+  border:1.5px solid #e5ddd5;
+  border-radius:12px;
+  padding:10px 12px;
+  margin-bottom:8px;
+  box-shadow:2px 2px 0 rgba(0,0,0,.05);
+}
+.msg:hover{background:var(--accent-soft);border-color:var(--accent)}
+.msg.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%{background:var(--accent-soft)}100%{background:transparent}}
+.avatar{
+  flex:0 0 38px;width:38px;height:38px;
+  background:var(--accent-soft);
+  border:2px solid #222;border-radius:12px;color:#222;
+}
+.meta .who{font-family:"Jua","Gowun Dodum",sans-serif;font-size:15px;color:inherit}
+.badge{background:#fffaf5;border:1px solid #d8cfc6;color:#8a8378;border-radius:999px}
+.time{color:#a39a8f}
+.content code{background:#f7f3ef;border:1px solid #e5ddd5;color:#333}
+.content pre{background:#f7f3ef;border:1px solid #e5ddd5}
+.mention{color:var(--accent-dark);background:var(--accent-soft)}
+.replyq{
+  border-left:3px solid var(--accent);background:#fffaf5;color:#8a8378;
+}
+.replyq:hover{background:var(--accent-soft)}
+.replyq b{color:#222}
+.replybtn{background:#fff;border:1.5px solid #222;color:#8a8378}
+.empty{color:#a39a8f}
+
+/* ---------- 5. 작성창 = 방명록 쓰기 ---------- */
+.composer{background:#fff;border-top:2px solid #222}
+.composer::before{
+  content:"✍ 방명록 쓰기";
+  display:block;
+  font-family:"Jua","Gowun Dodum",sans-serif;
+  font-size:14px;
+  color:var(--accent-dark);
+  margin-bottom:8px;
+}
+.replybar{background:#fffaf5;border:1.5px solid #e5ddd5;color:#8a8378}
+.replybar b{color:#222}
+.replybar .x{color:#999}
+.attachbar{background:#fffaf5;border:1.5px solid #e5ddd5;color:#8a8378}
+.attachbar b{color:#222}
+.attachbar .x{color:#999}
+.attachbtn{background:#fff;border:1.5px solid #222;color:#333}
+.attachbtn:hover{border-color:var(--accent);background:var(--accent-soft)}
+.att-img-wrap{border:1.5px solid #222;box-shadow:3px 3px 0 rgba(0,0,0,.15)}
+.att-file{background:#fff;border:1.5px solid #222;color:#222;box-shadow:2px 2px 0 rgba(0,0,0,.12)}
+.att-file:hover{border-color:var(--accent);background:var(--accent-soft)}
+.att-file span{color:#999}
+select#senderSel{background:#fff;color:#222;border:1.5px solid #222}
+#input{background:#fff;color:#222;border:1.5px solid #222}
+#input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+#input::placeholder{color:#b0a89d}
+#sendBtn{
+  background:var(--accent);border:2px solid #222;color:#fff;
+  font-family:"Jua","Gowun Dodum",sans-serif;font-size:15px;
+  border-radius:12px;padding:10px 16px;
+  box-shadow:3px 3px 0 #222;
+}
+#sendBtn::before{content:"🌰 "}
+#sendBtn:disabled{opacity:.55}
+.hint{color:#b0a89d}
+
+/* ---------- 6. 입장 화면 = 미니홈피 표지 ---------- */
+.gate{
+  background:
+    radial-gradient(circle at 1px 1px, rgba(255,255,255,.55) 1.2px, transparent 0) 0 0/22px 22px,
+    linear-gradient(180deg, var(--bg), var(--bg2));
+}
+.gate .card{
+  background:#fff;border:2px solid #222;border-radius:18px;
+  box-shadow:6px 6px 0 rgba(0,0,0,.85);
+  overflow:hidden;
+}
+.gate .card::before{
+  content:"♥ 핑크팀 미니홈피";
+  display:block;
+  background:var(--accent);
+  color:#fff;
+  font-family:"Jua","Gowun Dodum",sans-serif;
+  font-size:16px;text-align:center;
+  padding:10px 12px;
+  margin:-24px -22px 16px;
+  border-bottom:2px solid #222;
+}
+.gate h2{font-family:"Jua","Gowun Dodum",sans-serif;font-size:20px}
+.gate p{color:#8a8378}
+.gate input{background:#fff;border:1.5px solid #222;color:#222}
+.gate input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.gate input::placeholder{color:#b0a89d}
+.gate button{
+  background:var(--accent);border:2px solid #222;color:#fff;
+  box-shadow:2px 2px 0 #222;
+}
+.gate .err{color:#d92d20}
+
+/* ---------- 스크롤바 ---------- */
+.messages::-webkit-scrollbar,.rooms::-webkit-scrollbar,.plist::-webkit-scrollbar{width:10px}
+.messages::-webkit-scrollbar-thumb,.rooms::-webkit-scrollbar-thumb,.plist::-webkit-scrollbar-thumb{
+  background:#e5ddd5;border-radius:8px;border:2px solid #fff;
+}
+.messages::-webkit-scrollbar-thumb:hover,.rooms::-webkit-scrollbar-thumb:hover,.plist::-webkit-scrollbar-thumb:hover{
+  background:var(--accent);
+}
+
+/* ---------- 모바일 ---------- */
+@media (max-width:760px){
+  #app{
+    margin:6px;
+    height:calc(100dvh - 12px);
+    border-radius:14px;
+    box-shadow:4px 4px 0 rgba(0,0,0,.85);
+  }
+  .sidebar{
+    background:linear-gradient(180deg, var(--accent-soft), #fff 55%);
+    border-right:2px solid #222;
+    box-shadow:6px 0 0 rgba(0,0,0,.12);
+  }
+  body.nav-open:after{background:rgba(34,34,34,.45)}
+  .topbar::after{display:none}
+  .messages{margin:10px 10px 8px;padding:10px 10px 6px}
+  .msg{padding:9px 10px}
+  .composer::before{font-size:13px}
+  .composer{padding:9px 10px calc(12px + env(safe-area-inset-bottom))}
+  .replybtn{color:#a39a8f}
+  #senderSel{max-width:88px;font-size:12.5px;padding:9px 4px}
+  #sendBtn{padding:10px 12px}
+}
